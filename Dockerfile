@@ -1,17 +1,17 @@
-FROM python:3.10-slim
+# Use an official Python runtim as the parent image
+FROM python:3.8-slim-buster
 
-# Set working directory
+# Set the working directory to /app
 WORKDIR /app
 
-# Copy dependency list and install
-COPY requirements.txt .
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Run upgrade pip
+RUN pip install --upgrade pip
+
+# Install any requirements needed from a requirements.txt file
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the entire project (including templates and stocks.csv)
-COPY . .
-
-# Set Flask app path
-ENV FLASK_APP=app.py
-
-# Run the app
-CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
+# Set the default command to run when starting the container
+CMD ["python", "app.py"]
