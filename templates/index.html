@@ -6,29 +6,40 @@
 <body>
     <h1>Stock Data Visualizer</h1>
     <form method="POST">
-        <label>Symbol:</label>
-        <input type="text" name="symbol" required><br><br>
+        <label for="symbol">Symbol:</label>
+        <select name="symbol" required>
+            <option value="">Select a symbol</option>
+            {% for symbol in stock_symbols %}
+                <option value="{{ symbol }}" {% if symbol == selected_symbol %}selected{% endif %}>{{ symbol }}</option>
+            {% endfor %}
+        </select><br><br>
 
-        <label>Chart Type:</label>
+        <label for="chart_type">Chart Type:</label>
         <select name="chart_type">
-            <option value="1">Line</option>
-            <option value="2">Bar</option>
+            <option value="1" {% if chart_type == 1 %}selected{% endif %}>Line</option>
+            <option value="2" {% if chart_type == 2 %}selected{% endif %}>Bar</option>
         </select><br><br>
 
-        <label>Time Series:</label>
+        <label for="time_series">Time Series:</label>
         <select name="time_series">
-            <option value="1">Intraday</option>
-            <option value="2">Daily</option>
-            <option value="3">Weekly</option>
-            <option value="4">Monthly</option>
+            <option value="1" {% if time_series == 1 %}selected{% endif %}>Intraday</option>
+            <option value="2" {% if time_series == 2 %}selected{% endif %}>Daily</option>
+            <option value="3" {% if time_series == 3 %}selected{% endif %}>Weekly</option>
+            <option value="4" {% if time_series == 4 %}selected{% endif %}>Monthly</option>
         </select><br><br>
+
+        <label for="start_date">Start Date:</label>
+        <input type="date" name="start_date" required><br><br>
+
+        <label for="end_date">End Date:</label>
+        <input type="date" name="end_date" required><br><br>
 
         <button type="submit">Generate Chart</button>
     </form>
 
     <div name="chart_div">
-        {% if chart_created and chart_filename %}
-            <h2>Chart for {{ symbol }} - {{ frame }}</h2>
+        {% if chart_filename %}
+            <h2>Chart for {{ selected_symbol }}</h2>
             <img src="{{ url_for('static', filename=chart_filename) }}" width="600" alt="Stock Chart">
         {% endif %}
     </div>
