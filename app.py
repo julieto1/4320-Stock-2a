@@ -82,7 +82,10 @@ def render_chart(chart_type, opens, highs, lows, closes):
         chart = pygal.Line(style=custom_style)
         chart.title = 'Stock Prices (Line Chart)'
         chart.add('Close', closes)
-        filename = 'line_chart.svg'
+        chart.add('High', highs)
+        chart.add('Low', lows)
+        chart.add('Close', closes)
+        # filename = 'line_chart.svg'
 
     elif chart_type == 2:  # Bar chart
         chart = pygal.Bar(style=custom_style, width=1200, height=600)
@@ -91,11 +94,12 @@ def render_chart(chart_type, opens, highs, lows, closes):
         chart.add('High', highs)
         chart.add('Low', lows)
         chart.add('Close', closes)
-        filename = 'bar_chart.svg'
+        # filename = 'bar_chart.svg'
 
-    chart.render_to_file(os.path.join("static", filename))
+    # chart.render_to_file(os.path.join("static", filename))
+    print("Chart generated")
 
-    return filename
+    return chart.render_data_uri()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -120,12 +124,12 @@ def index():
         opens, highs, lows, closes = get_stock_data(selected_symbol, time_series, start_date, end_date)
 
         # Render the chart
-        chart_filename = render_chart(chart_type, opens, highs, lows, closes)
+        chart = render_chart(chart_type, opens, highs, lows, closes)
 
     return render_template('index.html', 
                            stock_symbols=stock_symbols, 
                            selected_symbol=selected_symbol, 
-                           chart_filename=chart_filename,
+                           chart=chart,
                            start_date=start_date,
                            end_date=end_date)
 

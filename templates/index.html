@@ -38,9 +38,9 @@
     </form>
 
     <div name="chart_div">
-        {% if chart_filename %}
+        {% if chart %}
             <h2>Chart for {{ selected_symbol }}</h2>
-            <img src="{{ url_for('static', filename=chart_filename) }}" width="600" alt="Stock Chart">
+            <embed type="image/svg+xml" src= {{ chart|safe }} />
         {% endif %}
     </div>
 </body>
